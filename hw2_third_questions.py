@@ -66,20 +66,16 @@ def total_registered_cases_per_country(data):
     """
     Calculate the total registered COVID-19 cases for each country.
 
-    This function takes a dictionary where keys are country names and values are either 
-    lists of integers (representing weekly registered cases) or single integers. It returns 
+    This function takes a dictionary where keys are country names and values are in list. It returns 
     a new dictionary where each key is a country name and each value is the total number 
-    of registered cases for that country.
+    of registered cases for that country. This function uses my previously defined function to sum up 
+    total cases of Covid.
 
     Parameters:
-    data (dict): A dictionary with country names as keys and either lists of integers or single integers as values representing the number of cases.
+    data (dict): A dictionary with country names as keys and lists as values representing the number of cases.
 
     Returns:
     dict: A dictionary where each key is a country name and each value is the total number of cases registered for that country.
-
-    Raises:
-    TypeError: If the provided data is not a dictionary.
-    ValueError: If any value in the dictionary is neither a list of integers nor a single integer.
     """
 
     final_dict = {}
@@ -105,20 +101,16 @@ def country_with_most_cases(data):
     """
     Determine the country with the most registered COVID-19 cases.
 
-    This function takes a dictionary where keys are country names and values are either 
-    lists of integers (representing weekly registered cases) or single integers. It 
+    This function takes a dictionary where keys are country names and values are in list. It 
     calculates the total number of cases for each country and returns the name of the 
-    country with the highest total.
+    country with the highest total. This function uses my previously defined functions to sum up 
+    total cases of Covid and then get the country with highest records out of it.
 
     Parameters:
     data (dict): A dictionary with country names as keys and either lists of integers or single integers as values representing the number of cases.
 
     Returns:
     str or None: The name of the country with the highest total number of registered cases. If no valid data is provided, it will return None.
-
-    Raises:
-    TypeError: If the provided data is not a dictionary.
-    ValueError: If any value in the dictionary is neither a list of integers nor a single integer.
     """
 
     saved_highest_val = 0
