@@ -18,7 +18,7 @@
 # The function should return the total number of cases
 # registered so far in that country
 
-def total_registered_cases(data,cnt_name):
+def total_registered_cases(data, cnt_name):
     """
     Calculate the total registered COVID-19 cases for a specified country.
     
@@ -27,28 +27,29 @@ def total_registered_cases(data,cnt_name):
     cnt_name (str): The name of the country for which to calculate the total cases.
     
     Returns:
-    int: The total number of cases for the specified country. If country is not in the list specific text will printed.
+    int: The total number of cases for the specified country. If country is not in the list it will raise an error.
     """
     # Check for first input's data type
     if not isinstance(data, dict):
         raise TypeError("The provided data should be in shape of dictionary.")
     
     # Check for second input's data type
-    if not isinstance(cnt_name,str):
+    if not isinstance(cnt_name, str):
         raise TypeError("The provided country name should be in format of string.")
     
     # If someone gives a country name input in different cases (camel, snake or etc) function will still match it
-    cnt_name_lower=cnt_name.lower()
-    data_lower={country.lower(): numbers for country, numbers in data.items()}
+    cnt_name_lower = cnt_name.lower()
+    data_lower = {country.lower(): numbers for country, numbers in data.items()}
     
     # Check if the specified country exists in the normalized dictionary
     if cnt_name_lower not in data_lower:
-        return "This country is not in the list"
+        raise ValueError ('This country is not in the list')
     
     return sum(data_lower[cnt_name_lower])
 
-# Calculate and return the total number of registered cases for the specified country
-print(total_registered_cases({'Spain': [4, 8, 2, 0, 1], 'France': [2, 3, 6]},"sPAIN"))
+# Test
+print(total_registered_cases({'Spain': [4, 8, 2, 0, 1], 'France': [2, 3, 6]},"sPain"))
+#print(total_registered_cases({'Spain': [4, 8, 2, 0, 1], 'France': [2, 3, 6]},"Italy"))
 
 
 # 8)
@@ -80,25 +81,17 @@ def total_registered_cases_per_country(data):
     TypeError: If the provided data is not a dictionary.
     ValueError: If any value in the dictionary is neither a list of integers nor a single integer.
     """
-    # Check for first input's data type
-    if not isinstance(data, dict):
-        raise TypeError("The provided data should be in shape of dictionary.")
-    
-    # Creating loop that will run through all countries and save their total numbers of cases in new dictionary
-    final_dict={}
-    
-    # Checking data types of dictionary values. It should be either list or int
-    for cnt_name,n_of_cases in data.items():
-        if isinstance(n_of_cases,list):
-            final_dict[cnt_name]=sum(n_of_cases)
-        elif isinstance(n_of_cases,int):
-            final_dict[cnt_name]=n_of_cases
-        else:
-            raise ValueError ("In data number of cases either should be provided as a list or integers")
-        
+
+    final_dict = {}
+    for country in data.keys():
+        final_dict[country]=total_registered_cases(data,country)
     return final_dict
 
-print(total_registered_cases_per_country({'Spain': 5, 'France': [2, 3, 6]}))
+# Test
+print(total_registered_cases_per_country({'Spain': [5], 'France': [2, 3, 6]}))
+
+
+
 
 # 9)
 # Create a function called "country_with_most_cases"
@@ -127,30 +120,15 @@ def country_with_most_cases(data):
     TypeError: If the provided data is not a dictionary.
     ValueError: If any value in the dictionary is neither a list of integers nor a single integer.
     """
-    # Check for first input's data type
-    if not isinstance(data, dict):
-        raise TypeError("The provided data should be in shape of dictionary.")
-    
-    # Create variables that will save information when using a loop
-    saved_highest_val=0
-    fin_cnt=None
-    
-    # With the help of loop validate the type of values in dictionary
-    # Sum up the total N of cases by each country
-    for cnt_name,n_of_cases in data.items():
-        if isinstance(n_of_cases,list):
-            total_cases=sum(n_of_cases)
-        elif isinstance(n_of_cases,int):
-            total_cases=n_of_cases
-        else:
-            raise ValueError ("In data number of cases either should be provided as a list or integers")
-        
-        # Using logic to save the highest number of cases
-        
-        if total_cases>saved_highest_val:
-            saved_highest_val=total_cases
-            fin_cnt=cnt_name
-    # Finally return the country that had the highest N of cases    
+
+    saved_highest_val = 0
+    fin_cnt = None
+    sum_all_countries = total_registered_cases_per_country(data)
+    for country, number in sum_all_countries.items():
+        if number > saved_highest_val:
+            saved_highest_val = number
+            fin_cnt = country
     return fin_cnt
 
-print(country_with_most_cases({'Spain': 5, 'France': [2, 3, 6],'Georgia':250}))
+# Test
+print(country_with_most_cases({'Spain': [5], 'France': [2, 3, 6],'Georgia':[250]}))
